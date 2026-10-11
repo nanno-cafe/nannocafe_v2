@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#6b4636">
+<title>Mi tarjeta · Nanno Café</title>
+<link rel="icon" href="favicon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mi tarjeta">
+<link rel="stylesheet" href="styles.css?v=6916b2be6f">
+</head>
+<body class="customer-page">
+<main class="shell narrow">
+
+  <header class="brand centered">
+    <span class="logo brandmark"><img src="logo.svg" alt="Nanno Café"></span>
+    <div><h1>Nanno Café</h1><p>Tu próxima pausa empieza acá.</p></div>
+  </header>
+
+  <section id="card" class="card center loyalty-card"><p style="padding:30px" role="status">Preparando tu tarjeta…</p></section>
+  <p id="customerStatus" role="status" class="center muted"></p>
+
+  <section class="card center card-guide">
+    <h3>Volver tiene su regalo.</h3>
+    <p>Comprás 4 cafés y el <b>5.º lo invitamos nosotros</b>.</p>
+    <p>Mostrá tu QR en cada visita y sumá un nuevo momento.</p>
+  </section>
+  <p class="footer-note">Hecho con café y mucho cariño.</p>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+<script src="config.js?v=6916b2be6f"></script>
+<script src="themes.js?v=6916b2be6f"></script>
+<script src="app.js?v=6916b2be6f"></script>
+<script>window.Nanno.initCustomer()</script>
+</body>
+</html>
