@@ -120,7 +120,7 @@
     let desde = 0, todos = [];
     for (;;) {
       const { data, error } = await sb.from('clients')
-        .select('id,name,phone,qr_token,coffees,free_coffee_available,created_at,favorite_coffee,last_invited_at')
+        .select('id,name,phone,qr_token,coffees,free_coffee_available,created_at,favorite_coffee,last_invited_at,loyalty_revision')
         .eq('active', true)
         .order('name')
         .range(desde, desde + PAGINA - 1);
@@ -370,6 +370,7 @@
     $('#login').classList.add('hidden');
     $('#app').classList.remove('hidden');
     await Promise.all([cargarPanel(), window.NannoThemes.setupAdmin()]);
+    await window.NannoActivity.attach(sb);
   }
 
   /* Guarda una contraseña nueva. La usan la pantalla de recuperación y el
@@ -422,6 +423,7 @@
       $('#giftCount').textContent = s.gifts_count ?? 0;
       clientesEnMemoria = clientes;
       listarClientes();
+      document.dispatchEvent(new Event('nanno:data'));
     } catch (e) {
       $('#clientList').innerHTML =
         `<p class="error">${esc(mensajeDeError(e))}</p>`;
@@ -588,6 +590,7 @@
   async function abrirDetalle(id) {
     const c = clientesEnMemoria.find(x => x.id === id);
     if (!c) return;
+    window.NannoActivity.bindCorrection(c,async()=>{await cargarPanel();await abrirDetalle(id);});
     $('#detailName').textContent = c.name;
     $('#detailPhone').textContent = c.phone || 'sin teléfono';
     $('#detailFav').textContent = c.favorite_coffee ? `☕ Su favorito: ${c.favorite_coffee}` : '';
@@ -697,7 +700,7 @@
     $('#confirmDeactivate').classList.add('hidden');
 
     const { data: eventos, error } = await sb.from('loyalty_events')
-      .select('event_type,created_at')
+      .select('event_type,created_at,reason,actor_name,balance_before,balance_after')
       .eq('client_id', id)
       .order('created_at', { ascending: false })
       .limit(50);
@@ -707,12 +710,7 @@
     } else if (!eventos.length) {
       $('#detailHistory').innerHTML = '<p>Sin movimientos todavía.</p>';
     } else {
-      $('#detailHistory').innerHTML = eventos.map(ev => {
-        const f = new Date(ev.created_at).toLocaleString('es-AR',
-          { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' });
-        const etiqueta = ev.event_type === 'coffee' ? '☕ Café' : '🎁 Regalo usado';
-        return `<div class="client"><div>${etiqueta}</div><small>${esc(f)}</small></div>`;
-      }).join('');
+      $('#detailHistory').innerHTML = window.NannoActivity.render(eventos,true);
     }
   }
 

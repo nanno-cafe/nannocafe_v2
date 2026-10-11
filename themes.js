@@ -2,15 +2,42 @@
 (() => {
   const palettes = {
     classic: { brand:'#543b2c', ink:'#342c25', muted:'#736758', background:'#f3eddf', paper:'#fffcf5', accent:'#70816c', label:'El ritual de volver.', art:'coffee-art.svg' },
-    halloween: { brand:'#edb376', ink:'#f7ead6', muted:'#cfb79a', background:'#231d19', paper:'#342820', accent:'#dc9a60', label:'Un cafecito de otro mundo.', art:'halloween-art.svg' }
+    halloween: { brand:'#edb376', ink:'#f7ead6', muted:'#cfb79a', background:'#231d19', paper:'#342820', accent:'#dc9a60', label:'Un cafecito de otro mundo.', art:'halloween-art.svg' },
+    christmas: { brand:'#f0d5a0', ink:'#fff5df', muted:'#d0dccc', background:'#153a30', paper:'#20463a', accent:'#dfa999', label:'Compartir es el mejor regalo.', art:'christmas-art.svg' }
   };
   let sb, state = { theme:'classic', animations_enabled:true };
   let isAdmin = false;
+  const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+  function particles() {
+    let layer=document.querySelector('#seasonParticles');
+    if(!layer){layer=document.createElement('div');layer.id='seasonParticles';layer.className='season-particles';layer.setAttribute('aria-hidden','true');document.body.prepend(layer);}
+    const enabled=state.animations_enabled && !reducedMotion.matches && ['halloween','christmas'].includes(state.theme);
+    const signature=enabled?state.theme:'off';
+    layer.hidden=!enabled;layer.dataset.paused=document.hidden?'true':'false';
+    if(layer.dataset.effect===signature)return;
+    layer.dataset.effect=signature;layer.replaceChildren();
+    if(!enabled)return;
+    const count=state.theme==='halloween'?14:32;
+    for(let i=0;i<count;i++){
+      const item=document.createElement('span');
+      item.className=state.theme==='halloween'?'ambient-bat':'ambient-snow';
+      item.style.setProperty('--x',`${(i*37+7)%100}%`);
+      item.style.setProperty('--y',`${(i*23+3)%100}%`);
+      item.style.setProperty('--duration',`${12+(i*7)%15}s`);
+      item.style.setProperty('--delay',`${-((i*11)%29)}s`);
+      item.style.setProperty('--drift',`${(i%2?1:-1)*(25+i%5*12)}px`);
+      item.style.setProperty('--size',`${state.theme==='halloween'?22+i%4*5:3+i%4}px`);
+      if(state.theme==='halloween') item.innerHTML='<svg viewBox="0 0 64 32" aria-hidden="true"><g class="bat-wing left"><path d="M31 17C20 1 7 1 1 4c5 5 4 10 4 14 7-4 13-1 16 7 3-6 7-6 10-4Z"/></g><g class="bat-wing right"><path d="M33 17C44 1 57 1 63 4c-5 5-4 10-4 14-7-4-13-1-16 7-3-6-7-6-10-4Z"/></g><path d="m27 9 3 4h4l3-4 1 12-6 10-6-10Z"/></svg>';
+      layer.append(item);
+    }
+  }
+  reducedMotion.addEventListener('change',particles);
   function apply(next) {
     const previous = JSON.stringify(state);
     state = { theme:palettes[next?.theme] ? next.theme : 'classic', animations_enabled:next?.animations_enabled !== false };
     document.documentElement.dataset.theme = state.theme;
     document.documentElement.dataset.motion = state.animations_enabled ? 'on' : 'off';
+    particles();
     document.querySelectorAll('[data-season-copy]').forEach(el => el.textContent = palettes[state.theme].label);
     document.querySelectorAll('[data-coffee-art]').forEach(el => el.src = palettes[state.theme].art);
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', palettes[state.theme].background);
@@ -83,6 +110,7 @@
     };
   }
   document.addEventListener('visibilitychange', () => {
+    particles();
     if (!document.hidden && sb) refresh();
   });
   // Reevalúa fechas también si la tarjeta queda abierta al pasar la medianoche.

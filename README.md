@@ -1,5 +1,9 @@
 # Publicar Nanno V2 sin reemplazar la app actual
 
+**Actualización de una V2 ya publicada:** seguir `ACTUALIZAR_V2.md` de la carpeta
+de desarrollo. Primero ejecutar `04_movimientos_y_correcciones.sql` en Supabase
+y luego subir el ZIP actualizado. La nueva web necesita esa migración.
+
 La nueva web está en `app-v2/`. Ya usa el proyecto Supabase nuevo
 `pcsiujgxdsbprxeikvbj`. La web anterior permanece en `app/`, con su configuración
 original. No se migraron clientes, cafés ni QR, y no se publicó nada en GitHub.
@@ -38,7 +42,8 @@ GitHub aloja la web y Supabase guarda los datos. La web llama directamente a
 Supabase usando `SUPABASE_URL` y `SUPABASE_ANON_KEY` de `config.js` (este último
 nombre se conserva por compatibilidad; su valor ya es la clave publishable).
 
-La nueva base está configurada. No hay que volver a crear tablas ni conectar
+La nueva base está configurada. Para esta actualización se ejecuta el archivo
+`04_movimientos_y_correcciones.sql` una vez antes de publicar. No hay que conectar
 GitHub con un plugin. Tener ambos servicios en cuentas diferentes tampoco
 impide que funcione esta conexión.
 
@@ -57,10 +62,10 @@ Cuando definamos la URL definitiva se puede fijar allí con `/` al final.
 
 Referencia oficial: https://supabase.com/docs/guides/auth/redirect-urls
 
-## Activar Halloween
+## Activar Halloween o Navidad
 
 Ingresá como administrador y abrí **Configuración > Apariencia y temporada**.
-Elegí **Nanno Halloween**, revisá la vista previa y tocá **Guardar diseño**.
+Elegí **Nanno Halloween** o **Nanno Navidad**, revisá la vista previa y tocá **Guardar diseño**.
 Podés dejar las fechas vacías para aplicarlo ahora o elegir inicio y fin.
 El día de fin se incluye completo, según horario de Argentina; luego vuelve
 a Clásico. Los cambios llegan al abrir una pantalla, volver a ella o en el

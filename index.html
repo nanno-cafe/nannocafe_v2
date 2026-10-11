@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Nanno">
-<link rel="stylesheet" href="styles.css?v=6916b2be6f">
+<link rel="stylesheet" href="styles.css?v=efade2b150">
 </head>
 <body>
 <main class="shell">
@@ -83,7 +83,7 @@
 
     <div class="stats">
       <div><small>Clientes activos</small><strong id="clientsCount">0</strong><span class="stat-tag">Nuestra comunidad</span></div>
-      <div><small>Cafés registrados</small><strong id="coffeeCount">0</strong><span class="stat-tag">Pequeños rituales compartidos</span></div>
+      <div><small>Cafés netos</small><strong id="coffeeCount">0</strong><span class="stat-tag">Compras menos correcciones</span></div>
       <div><small>Regalos entregados</small><strong id="giftCount">0</strong><span class="stat-tag">Una forma de decir gracias</span></div>
     </div>
 
@@ -110,6 +110,23 @@
       </label>
       <p id="ordenAyuda"><small>Tocá un cliente para ver su historial o editarlo.</small></p>
       <div id="clientList" aria-live="polite"></div>
+    </section>
+    <section class="card activity-section" aria-labelledby="activityTitle">
+      <div class="top"><div><p class="eyebrow">Registro de operaciones</p><h3 id="activityTitle">Movimientos generales</h3>
+        <p id="activityCount" class="muted">Consultando historial…</p></div>
+        <button id="activityRefresh" class="ghost">↻ Actualizar</button></div>
+      <div class="activity-filters">
+        <label>Buscar cliente<input id="activitySearch" type="search" placeholder="Nombre del cliente"></label>
+        <label>Tipo de movimiento<select id="activityType">
+          <option value="">Todos los movimientos</option><option value="coffee">Cafés sumados</option>
+          <option value="coffee_removed">Correcciones de cafés</option><option value="gift_redeemed">Regalos entregados</option>
+          <option value="client_created">Altas de clientes</option><option value="client_updated">Ediciones de clientes</option>
+          <option value="client_deactivated">Bajas de clientes</option><option value="client_reactivated">Reactivaciones</option>
+        </select></label>
+      </div>
+      <div id="activityList" role="region" aria-label="Historial de movimientos" tabindex="0"></div>
+      <p id="activityStatus" class="muted" role="status"></p>
+      <button id="activityMore" class="ghost full hidden">Cargar movimientos anteriores</button>
     </section>
   </section>
 
@@ -143,6 +160,7 @@
   <div class="actions">
     <button type="button" id="addCoffeeOpen" class="action primary">☕ Agregar café</button>
     <button type="button" id="detailGift" class="action secondary hidden">🎁 Entregar café de regalo</button>
+    <button type="button" id="removeCoffeeOpen" class="ghost hidden">− Quitar 1 café</button>
   </div>
   <form id="addCoffeeForm" class="card hidden">
     <label>¿Cuántos cafés?<input id="addCoffeeCount" type="number"
@@ -153,6 +171,14 @@
     </div>
   </form>
   <p id="detailMsg" class="center"></p>
+  <form id="removeCoffeeForm" class="card correction-form hidden">
+    <h3>Corregir una carga</h3><p id="removeCoffeeSummary"></p>
+    <label>Motivo<input id="removeCoffeeReason" maxlength="300" minlength="3" required placeholder="Ej.: se registró la compra dos veces"></label>
+    <p class="appearance-help">La operación original se conserva. Se registra una corrección de −1 a tu nombre.</p>
+    <div class="actions"><button type="submit" class="primary">Confirmar: quitar 1 café</button>
+    <button type="button" id="removeCoffeeCancel" class="ghost">Cancelar</button></div>
+    <p id="removeCoffeeMsg" role="status"></p>
+  </form>
 
   <div class="actions">
     <a id="openCard" class="action" target="_blank" rel="noopener">Ver tarjeta y QR</a>
@@ -235,6 +261,10 @@
         Nanno Halloween<span>Un toque de magia en tu café.</span>
         <div class="swatches" aria-hidden="true"><i style="background:#231d19"></i><i style="background:#ce7f43"></i><i style="background:#f7ead6"></i></div>
       </label>
+      <label class="theme-choice"><input type="radio" name="theme" value="christmas">
+        Nanno Navidad<span>Café caliente, buenos deseos.</span>
+        <div class="swatches" aria-hidden="true"><i style="background:#153a30"></i><i style="background:#f0d5a0"></i><i style="background:#dfa999"></i></div>
+      </label>
     </fieldset>
     <div id="themePreview" class="theme-preview" data-theme="classic">
       <small>VISTA PREVIA</small><img src="coffee-art.svg" alt="Ilustración de la plantilla">
@@ -250,8 +280,9 @@
     <p id="appearanceMsg" role="status"></p>
   </form>
 </dialog>
-<script src="config.js?v=6916b2be6f"></script>
-<script src="themes.js?v=6916b2be6f"></script>
-<script src="app.js?v=6916b2be6f"></script>
+<script src="config.js?v=efade2b150"></script>
+<script src="themes.js?v=efade2b150"></script>
+<script src="activity.js?v=efade2b150"></script>
+<script src="app.js?v=efade2b150"></script>
 </body>
 </html>
