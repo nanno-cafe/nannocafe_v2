@@ -11,13 +11,19 @@
   function particles() {
     let layer=document.querySelector('#seasonParticles');
     if(!layer){layer=document.createElement('div');layer.id='seasonParticles';layer.className='season-particles';layer.setAttribute('aria-hidden','true');document.body.prepend(layer);}
+    const card=document.querySelector('.loyalty-card');
+    let cardLayer=card?.querySelector('.card-particles');
+    if(card&&!cardLayer){cardLayer=document.createElement('div');cardLayer.className='season-particles card-particles';cardLayer.setAttribute('aria-hidden','true');card.prepend(cardLayer);}
+    [layer,cardLayer].filter(Boolean).forEach(renderParticles);
+  }
+  function renderParticles(layer) {
     const enabled=state.animations_enabled && !reducedMotion.matches && ['halloween','christmas'].includes(state.theme);
     const signature=enabled?state.theme:'off';
     layer.hidden=!enabled;layer.dataset.paused=document.hidden?'true':'false';
     if(layer.dataset.effect===signature)return;
     layer.dataset.effect=signature;layer.replaceChildren();
     if(!enabled)return;
-    const count=state.theme==='halloween'?14:32;
+    const count=state.theme==='halloween'?20:44;
     for(let i=0;i<count;i++){
       const item=document.createElement('span');
       item.className=state.theme==='halloween'?'ambient-bat':'ambient-snow';
@@ -115,6 +121,6 @@
   });
   // Reevalúa fechas también si la tarjeta queda abierta al pasar la medianoche.
   setInterval(() => { if (!document.hidden && sb) refresh(); },60000);
-  window.NannoThemes = { attach, refresh, setupAdmin,
+  window.NannoThemes = { attach, refresh, setupAdmin, refreshParticles:particles,
     get palette() { return palettes[state.theme]; }, get state() { return {...state}; } };
 })();

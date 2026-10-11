@@ -1063,6 +1063,7 @@
       finally { if ($('#refreshCard')) $('#refreshCard').disabled = false; }
     };
     dibujarSellos($('#cardStamps'), c.coffees, c.free_coffee_available);
+    window.NannoThemes.refreshParticles();
 
     // Si la librería del QR no cargó, mostramos el link igual en vez de
     // dejar la tarjeta a medio dibujar.
